@@ -1,9 +1,9 @@
 package com.example.board.global.domain.repository;
 
 import com.example.board.global.domain.entity.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board,Long> {
 
@@ -12,11 +12,10 @@ public interface BoardRepository extends JpaRepository<Board,Long> {
     boolean existsByCafeId(Long cafeId);
     boolean existsByBoardTitle(String boardTitle);
 
+    Page<Board> findByMemberId(Long memberId, Pageable pageRequest);
+    Page<Board> findBySubGroupId(Long subGroupId, Pageable pageRequest);
 
-    List<Board> findByMemberId(Long memberId);
-    List<Board> findBySubGroupId(Long subGroupId);
+    Page<Board> findByCafeId(Long cafeId, Pageable pageRequest);
 
-    List<Board> findByCafeId(Long cafeId);
-
-    List<Board> findByBoardTitle(String boardTitle);
+    Page<Board> findByBoardTitle(String boardTitle, Pageable pageRequest);
 }

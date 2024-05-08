@@ -4,6 +4,8 @@ import com.example.board.dto.request.InsertBoardRequestDto;
 import com.example.board.dto.request.UpdateBoardRequestDto;
 import com.example.board.dto.response.BoardOneResponseDto;
 import com.example.board.global.domain.entity.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,16 +13,16 @@ import java.util.Optional;
 public interface BoardService {
     public void save(InsertBoardRequestDto req);
 
-    public List<Board> getAllBoards();
+    public Page<BoardOneResponseDto> getAllBoards(Pageable pageRequest);
 
-    public List<Board> getBoardsByMemberId(Long memberId);
+    public Page<BoardOneResponseDto> getBoardsByMemberId(Long memberId, Pageable pageRequest);
 
 
-    public List<Board> getBoardsBySubGroupId(Long subGroupId);
+    public Page<BoardOneResponseDto> getBoardsBySubGroupId(Long subGroupId, Pageable pageRequest);
 
-    public List<Board> getBoardsByCafeId(Long cafeId);
+    public Page<BoardOneResponseDto> getBoardsByCafeId(Long cafeId, Pageable pageRequest);
 
-    public List<Board> getBoardsByBoardTitle(String boardTitle);
+    public Page<BoardOneResponseDto> getBoardsByBoardTitle(String boardTitle, Pageable pageRequest);
 
     public void updateBoard(Long id, UpdateBoardRequestDto req);
 

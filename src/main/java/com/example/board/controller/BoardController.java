@@ -6,6 +6,10 @@ import com.example.board.dto.response.BoardOneResponseDto;
 import com.example.board.global.domain.entity.Board;
 import com.example.board.service.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,16 +28,21 @@ public class BoardController {
     }
 
     @GetMapping
-    public List<Board> getAllBoards(@RequestParam(name = "memberId", required = false, defaultValue = "-1") Long memberId,
+    public Page<BoardOneResponseDto> getAllBoards(@RequestParam(name = "memberId", required = false, defaultValue = "-1") Long memberId,
                                     @RequestParam(name = "subGroupId",required = false, defaultValue = "-1") Long subGroupId,
                                     @RequestParam(name = "cafeId",required = false, defaultValue = "-1") Long cafeId,
-                                    @RequestParam(name = "boardTitle",required = false, defaultValue = "" ) String boardTitle
+                                    @RequestParam(name = "boardTitle",required = false, defaultValue = "" ) String boardTitle,
+                                    @PageableDefault(
+                                            sort = "id",
+                                            direction = Sort.Direction.DESC,
+                                            size = 3
+                                    ) Pageable pageRequest
                                     ){
-        if(memberId != -1) return boardService.getBoardsByMemberId(memberId);
-        else if(subGroupId != -1) return boardService.getBoardsBySubGroupId(subGroupId);
-        else if(cafeId != -1) return boardService.getBoardsByCafeId(cafeId);
-        else if(boardTitle != null && !boardTitle.isEmpty()) return boardService.getBoardsByBoardTitle(boardTitle);
-        else return boardService.getAllBoards();
+        if(memberId != -1) return boardService.getBoardsByMemberId(memberId, pageRequest);
+        else if(subGroupId != -1) return boardService.getBoardsBySubGroupId(subGroupId, pageRequest);
+        else if(cafeId != -1) return boardService.getBoardsByCafeId(cafeId, pageRequest);
+        else if(boardTitle != null && !boardTitle.isEmpty()) return boardService.getBoardsByBoardTitle(boardTitle, pageRequest);
+        else return boardService.getAllBoards(pageRequest);
     }
 
     @PutMapping("/{id}")

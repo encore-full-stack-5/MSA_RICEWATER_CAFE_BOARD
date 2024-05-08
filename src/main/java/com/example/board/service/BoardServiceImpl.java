@@ -7,6 +7,8 @@ import com.example.board.exception.*;
 import com.example.board.global.domain.entity.Board;
 import com.example.board.global.domain.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,28 +22,35 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(req.toEntity());
     }
 
-    public List<Board> getAllBoards() {
-        return boardRepository.findAll();
+
+    public Page<BoardOneResponseDto> getAllBoards(Pageable pageRequest) {
+        Page<Board> all = boardRepository.findAll(pageRequest);
+        return all.map(BoardOneResponseDto::from);
     }
 
-    public List<Board> getBoardsByMemberId(Long memberId) {
+    public Page<BoardOneResponseDto> getBoardsByMemberId(Long memberId, Pageable pageRequest) {
         if(!boardRepository.existsByMemberId(memberId)) throw new UserNotFoundException();
-        return boardRepository.findByMemberId(memberId);
+        Page<Board> all = boardRepository.findByMemberId(memberId, pageRequest);
+        return all.map(BoardOneResponseDto::from);
     }
 
-    public List<Board> getBoardsBySubGroupId(Long subGroupId) {
+    public Page<BoardOneResponseDto> getBoardsBySubGroupId(Long subGroupId, Pageable pageRequest) {
         if(!boardRepository.existsBySubGroupId(subGroupId)) throw new SubGroupNotFoundException();
-        return boardRepository.findBySubGroupId(subGroupId);
+        Page<Board> all = boardRepository.findBySubGroupId(subGroupId, pageRequest);
+        return all.map(BoardOneResponseDto::from);
+
     }
 
-    public List<Board> getBoardsByCafeId(Long cafeId) {
+    public Page<BoardOneResponseDto> getBoardsByCafeId(Long cafeId, Pageable pageRequest) {
         if(!boardRepository.existsByCafeId(cafeId)) throw new CafeNotFoundException();
-        return boardRepository.findByCafeId(cafeId);
+        Page<Board> all =  boardRepository.findByCafeId(cafeId, pageRequest);
+        return all.map(BoardOneResponseDto::from);
     }
 
-    public List<Board> getBoardsByBoardTitle(String boardTitle) {
+    public Page<BoardOneResponseDto> getBoardsByBoardTitle(String boardTitle, Pageable pageRequest) {
         if(!boardRepository.existsByBoardTitle(boardTitle)) throw new BoardTitleNotFoundException();
-        return boardRepository.findByBoardTitle(boardTitle);
+        Page<Board> all =  boardRepository.findByBoardTitle(boardTitle, pageRequest);
+        return all.map(BoardOneResponseDto::from);
     }
 
     public void updateBoard(Long id, UpdateBoardRequestDto req) {
@@ -66,6 +75,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = byId.get();
         board.setBoardViews(board.getBoardViews()+1);
         boardRepository.save(board);
-        return new BoardOneResponseDto(board);
+        return BoardOneResponseDto.from(board);
     }
 }
