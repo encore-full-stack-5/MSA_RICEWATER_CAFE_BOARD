@@ -18,7 +18,7 @@ public class Board {
     @Column(name = "BOARD_TITLE") @Setter
     private String boardTitle;
     @Column(name = "BOARD_CONTENT") @Setter
-    private String boardContent;
+    private String boardContent; @Setter
     @Column(name = "BOARD_VIEWS")
     private Long boardViews;
     @Column(name = "CREATED_AT")

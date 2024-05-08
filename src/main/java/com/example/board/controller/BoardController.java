@@ -2,8 +2,9 @@ package com.example.board.controller;
 
 import com.example.board.dto.request.InsertBoardRequestDto;
 import com.example.board.dto.request.UpdateBoardRequestDto;
+import com.example.board.dto.response.BoardOneResponseDto;
 import com.example.board.global.domain.entity.Board;
-import com.example.board.service.BoardService;
+import com.example.board.service.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @RequestMapping("api/v1/boards")
 @RequiredArgsConstructor
 public class BoardController {
-    private final BoardService boardService;
+    private final BoardServiceImpl boardService;
 
     @PostMapping
     public void insertBoard(
@@ -35,9 +36,6 @@ public class BoardController {
         else return boardService.getAllBoards();
     }
 
-
-
-
     @PutMapping("/{id}")
     public void updateBoard(@PathVariable("id") Long id, @RequestBody UpdateBoardRequestDto req
     ){
@@ -50,9 +48,11 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public Board getBoardById(@PathVariable("id") Long id) {
+    public BoardOneResponseDto getBoardById(@PathVariable("id") Long id) {
         return boardService.getBoardById(id);
     }
+
+
 
 }
 
