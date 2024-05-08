@@ -7,6 +7,7 @@ import com.example.board.global.domain.entity.Board;
 import com.example.board.service.BoardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -32,12 +33,14 @@ public class BoardController {
                                     @RequestParam(name = "subGroupId",required = false, defaultValue = "-1") Long subGroupId,
                                     @RequestParam(name = "cafeId",required = false, defaultValue = "-1") Long cafeId,
                                     @RequestParam(name = "boardTitle",required = false, defaultValue = "" ) String boardTitle,
+                                    @RequestParam(name = "pageNo", required = false, defaultValue = "0") Integer pageNo,
                                     @PageableDefault(
                                             sort = "id",
                                             direction = Sort.Direction.DESC,
                                             size = 3
-                                    ) Pageable pageRequest
+                                    ) Pageable pageable
                                     ){
+        Pageable pageRequest = PageRequest.of(pageNo, pageable.getPageSize(), pageable.getSort());
         if(memberId != -1) return boardService.getBoardsByMemberId(memberId, pageRequest);
         else if(subGroupId != -1) return boardService.getBoardsBySubGroupId(subGroupId, pageRequest);
         else if(cafeId != -1) return boardService.getBoardsByCafeId(cafeId, pageRequest);
